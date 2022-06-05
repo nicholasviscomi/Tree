@@ -8,11 +8,11 @@ import (
 
 var pwd string
 func main() {
-	pwd, err := os.Getwd()
-	if err != nil {
-		fmt.Println("Failed Getting Current Working Directory!")
-		return
-	}
+	pwd := os.Args[1]
+	// if err != nil {
+	// 	fmt.Println("Failed Getting Current Working Directory!")
+	// 	return
+	// }
 
 	dir, err := os.ReadDir(pwd)
 	if err != nil {
@@ -23,14 +23,9 @@ func main() {
 	var cont  rune
 	numFiles := FullLength(dir, pwd)
 	if numFiles > 100 {
-		fmt.Printf("There are %s%s%d elements%s. Would you like to continue? [y/n]\n", 
+		fmt.Printf("There are %s%s%d elements%s. Exit now if you wish\n", 
 						colors[Red], colors[Bold], numFiles, colors[Reset])
-		_,err = fmt.Scan(&cont)
-
-		if err != nil || cont != 'y' {
-			fmt.Println("Exiting...")
-			return
-		}
+		_,err = fmt.Scanln(&cont)
 	}
 	
 	PrintDir(dir, 0, pwd, 10)
