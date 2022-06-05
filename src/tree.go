@@ -75,12 +75,13 @@ func PrintDir(dir []os.DirEntry, level int, pwd string) {
 			//Exit point for recursion
 			fmt.Printf("%s%s——> %s\n%s", Bold, Green, entry.Name(), Reset)
 
-			subdir,err := os.ReadDir(pwd + "/" + entry.Name())
+			path := pwd + "/" + entry.Name()
+			subdir,err := os.ReadDir(path)
 			if err != nil {
 				fmt.Println("error reading sub directory!")
 			}
 
-			PrintDir(subdir, level + 1, pwd)
+			PrintDir(subdir, level + 1, path)
 			continue
 		}
 
