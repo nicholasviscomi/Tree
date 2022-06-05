@@ -31,7 +31,7 @@ func main() {
 		}
 	}
 	
-	PrintDir(dir, 0, "", pwd)
+	PrintDir(dir, 0, pwd)
 }
 
 var count = 0
@@ -62,29 +62,29 @@ err = the return value from reading a directory
 level = how many subdirectories have been explored. 
 	--> Used to format the output with tabs
 */
-func PrintDir(dir []os.DirEntry, level int, parent, pwd string) {
-	path := pwd
-	if parent != "" {
-		path = pwd + "/" + parent
-	}
-
+func PrintDir(dir []os.DirEntry, level int, pwd string) {
+	
 	for _,entry := range dir {
 		for i := 0; i < level; i++ {
 			fmt.Print("  ")
 		}
+		if entry.Name() == ".DS_Store" { continue }
+		if entry.Name() == ".git" { continue }
 
 		if entry.IsDir() {
 			//Exit point for recursion
-			subdir,_ := os.ReadDir(path)
-
 			fmt.Printf("%s%s——> %s\n%s", Bold, Green, entry.Name(), Reset)
-			PrintDir(subdir, level + 1, entry.Name(), pwd)
+
+			subdir,err := os.ReadDir(pwd + "/" + entry.Name())
+			if err != nil {
+				fmt.Println("error reading sub directory!")
+			}
+
+			PrintDir(subdir, level + 1, pwd)
 			continue
 		}
 
-		if entry.Name() == ".DS_Store" { continue }
 
-		
 		fmt.Printf("——> %s\n", entry.Name())
 	}
 }
